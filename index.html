@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POMIS Calculator - Post Office Monthly Income Scheme</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .output {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .output h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .output p {
+            margin: 5px 0;
+            font-size: 18px;
+            font-weight: bold;
+            color: #27ae60;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>POMIS Calculator</h1>
+        <p style="text-align: center; color: #666;">Calculate your monthly income from Post Office Monthly Income Scheme</p>
+        
+        <form id="pomisForm">
+            <div class="form-group">
+                <label for="investment">Investment Amount (₹):</label>
+                <input type="number" id="investment" min="1000" max="1500000" value="150000" step="1000" required>
+                <small>Min: ₹1,000 | Max: ₹15,00,000 (Joint Account)</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="rate">Annual Interest Rate (%):</label>
+                <input type="number" id="rate" min="0" max="10" value="7.4" step="0.1" required>
+                <small>Current Rate: 7.4% (as of November 2025)</small>
+            </div>
+            
+            <div class="output" id="output">
+                <h3>Results</h3>
+                <p>Monthly Income: ₹<span id="monthly">0</span></p>
+                <p>Total Payout over 5 Years: ₹<span id="total">0</span></p>
+                <p>Maturity Amount: ₹<span id="maturity">0</span></p>
+            </div>
+        </form>
+        
+        <footer>
+            <p>Disclaimer: Calculations are estimates. Actual rates may vary. Consult official sources for latest information.</p>
+        </footer>
+    </div>
+
+    <script>
+        const form = document.getElementById('pomisForm');
+        const investmentInput = document.getElementById('investment');
+        const rateInput = document.getElementById('rate');
+        const monthlySpan = document.getElementById('monthly');
+        const totalSpan = document.getElementById('total');
+        const maturitySpan = document.getElementById('maturity');
+
+        function calculate() {
+            const principal = parseFloat(investmentInput.value) || 0;
+            const rate = parseFloat(rateInput.value) || 0;
+            
+            if (principal < 1000 || principal > 1500000) {
+                alert('Investment amount should be between ₹1,000 and ₹15,00,000.');
+                return;
+            }
+            
+            const monthlyRate = (rate / 100) / 12;
+            const monthlyIncome = principal * monthlyRate;
+            
+            const totalMonths = 5 * 12;
+            const totalInterest = monthlyIncome * totalMonths;
+            const totalPayout = totalInterest; // Since principal is returned separately
+            const maturity = principal; // Principal returned at end
+            
+            monthlySpan.textContent = monthlyIncome.toFixed(2);
+            totalSpan.textContent = totalPayout.toFixed(2);
+            maturitySpan.textContent = maturity.toLocaleString();
+        }
+
+        // Calculate on input change
+        investmentInput.addEventListener('input', calculate);
+        rateInput.addEventListener('input', calculate);
+
+        // Initial calculation
+        calculate();
+    </script>
+</body>
+</html>
